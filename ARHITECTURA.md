@@ -1,17 +1,15 @@
 # Arhitectura LifeSim
 
----
-
 ## 1. Cum e construită aplicația
 
 ### Logica locală (fără LLM)
 
-Toată simularea rulează **pur determinist** în browser (și pe server la nevoie),
+Toată simularea e deterministă și rulează în browser (și pe server, când e nevoie),
 fără niciun apel de rețea. Funcția `computeAllNPCStates()` din `lib/simulation.js`
-returnează același rezultat pentru aceleași inputuri — nu există `Math.random()`,
-ci un LCG bazat pe `Math.sin(seed)`.
+returnează același rezultat pentru aceleași date de intrare: în loc de `Math.random()`
+folosește un LCG bazat pe `Math.sin(seed)`.
 
-**Fluxul de calcul per NPC, per modul:**
+Fluxul de calcul pentru fiecare NPC, în fiecare modul:
 
 ```
 schedule de bază
@@ -53,33 +51,33 @@ ENERGIE
 ### Optimizările LLM
 
 #### 1. Lazy Evaluation
-LLM-ul **nu este apelat niciodată automat**. Starea inițială a fiecărui NPC
-este `null` (fără descriere). Apelul are loc strict la click-ul utilizatorului.
-Asta înseamnă 0 apeluri LLM la încărcarea paginii.
+LLM-ul nu e apelat niciodată automat. Fiecare NPC pornește cu descrierea `null`,
+iar apelul are loc doar când utilizatorul dă click. La încărcarea paginii se fac
+deci 0 apeluri LLM.
 
 #### 2. Caching în PostgreSQL (Neon)
-Înainte de orice apel LLM se construiește o **cheie de cache**:
+Înainte de orice apel LLM, aplicația construiește o cheie de cache:
 
 ```
 {npc_id}|{ziua}|{modul}|{locatie}|{mood}|{event}|{vreme}
 ```
 
-Dacă această cheie există în tabelul `npc_cache`, se returnează direct din DB —
-fără apel LLM. Un NPC cu același context (aceeași zi, modul, locație, mood,
-vreme, fără event) primește mereu aceeași descriere, instant.
+Dacă cheia există deja în tabelul `npc_cache`, descrierea vine direct din baza de date,
+fără apel LLM. Un NPC în același context (aceeași zi, modul, locație, mood și vreme,
+fără event) primește mereu aceeași descriere, instant.
 
 #### 3. Batching
-Când mai mulți NPC-uri se află **la aceeași locație publică** în același modul
-(ex: 3 prieteni la același teren de fotbal), un singur apel LLM generează
-descrieri pentru **toți**. Prompt-ul cere un array JSON:
+Când mai multe NPC-uri sunt în aceeași locație publică în același modul
+(de exemplu 3 prieteni pe același teren de fotbal), un singur apel LLM generează
+descrierile pentru toate. Prompt-ul cere un array JSON:
 
 ```json
 [{"id": 1, "descriere": "..."}, {"id": 9, "descriere": "..."}]
 ```
 
-Toate rezultatele se salvează în cache. Următoarele click-uri pe oricare
-din acești NPC-uri vor fi instant. Dacă JSON-ul e invalid, se face fallback
-la un apel individual.
+Toate rezultatele ajung în cache, așa că următoarele click-uri pe oricare dintre
+aceste NPC-uri răspund instant. Dacă JSON-ul primit e invalid, aplicația face
+câte un apel separat pentru fiecare NPC.
 
 ### Fluxul complet la click
 
@@ -113,22 +111,20 @@ route.js → buildCacheKey(npcId, context)
          Return { descriere, fromCache }
 ```
 
----
-
 ## 2. Cum ai scala la sute de NPC-uri
 
 ### Problema
 
-La 100+ NPC-uri apar trei probleme:
-1. **Date statice masive** — sute de schedule-uri hardcodate nu scalează
-2. **Apeluri LLM costisitoare** — fiecare NPC unic = apel separat
-3. **Cache ineficient** — prea multe combinații de chei
+La peste 100 de NPC-uri apar trei probleme:
+1. **Date statice masive**: sute de schedule-uri hardcodate nu scalează.
+2. **Apeluri LLM costisitoare**: fiecare NPC unic înseamnă un apel separat.
+3. **Cache ineficient**: există prea multe combinații de chei.
 
 ### Soluția: Dynamic Population
 
 #### Tipuri de NPC, nu indivizi
-În loc de 100 schedule-uri unice, definim **10–15 arhetipuri** (student,
-muncitor, pensionar, noctambul etc.) cu variații de parametri:
+În loc de 100 de schedule-uri unice, definim 10-15 arhetipuri (student,
+muncitor, pensionar, noctambul etc.) cu parametri care variază:
 
 ```js
 const ARHETIPURI = {
@@ -141,28 +137,27 @@ const ARHETIPURI = {
 function generateNPC(id, arhetip, seed) { ... }
 ```
 
-Astfel, 500 de NPC-uri = 15 template-uri + parametri de variație.
+Astfel, 500 de NPC-uri înseamnă 15 template-uri plus parametri de variație.
 
 #### Caching agresiv
 
-**Cheie de grup** în loc de cheie individuală — NPC-urile cu același
-arhetip + locație + modul + mood + vreme împart aceeași descriere
-(cu substituție de nume):
+Cheia de cache devine una de grup: NPC-urile cu același arhetip, locație, modul,
+mood și vreme împart aceeași descriere, în care se înlocuiește doar numele:
 
 ```
 cache_key: {arhetip}|{locatie}|{modul}|{mood}|{weather}
 ```
 
-Un singur apel LLM acoperă zeci de NPC-uri similare.
+Un singur apel LLM acoperă astfel zeci de NPC-uri asemănătoare.
 
-**Pre-warming** al cache-ului: la pornire, un job de background generează
+Cache-ul se poate și pre-încălzi: la pornire, un job de background generează
 descrierile pentru toate combinațiile arhetip × locație × modul × mood × vreme
-(~15 × 30 × 8 × 7 × 4 = ~100.000 combinații). Costul e O(1) per NPC la runtime.
+(~15 × 30 × 8 × 7 × 4 = ~100.000 combinații). La runtime, costul e O(1) per NPC.
 
 #### Batching extins
 
-Cu sute de NPC-uri la aceeași locație (ex: 80 de studenți la universitate),
-un singur prompt generează toate descrierile în paralel. Structura promptului:
+Când sute de NPC-uri sunt în aceeași locație (de exemplu 80 de studenți la universitate),
+un singur prompt generează toate descrierile deodată. Structura promptului:
 
 ```
 La Universitatea Cuza, Luni dimineața:
@@ -174,14 +169,14 @@ Genereaza 5 descrieri reprezentative (30 cuvinte fiecare) pentru studentii:
 ...
 ```
 
-Rezultatele se aplică aleatoriu NPC-urilor din același grup.
+Descrierile rezultate se împart aleatoriu NPC-urilor din același grup.
 
 #### LLM o singură dată la setup
 
-La generarea inițială a populației, LLM-ul rulează **offline** (batch API)
-pentru a crea un "vocabular de descrieri" per context. La runtime, aplicația
-face **lookup**, nu generare. Costul LLM devine un cost fix de setup,
-nu un cost per utilizator.
+La generarea inițială a populației, LLM-ul rulează offline (prin batch API)
+și creează un "vocabular de descrieri" pentru fiecare context. La runtime aplicația
+doar caută descrierea potrivită în baza de date, așa că LLM-ul costă o singură dată,
+la setup, indiferent câți utilizatori are aplicația.
 
 ```
 Setup (o dată): LLM → 100k descrieri → DB
@@ -195,5 +190,5 @@ Runtime:        User click → DB lookup (sub 10ms)
 | State management | Redis (în loc de simplu useState) |
 | DB | Neon cu connection pooling (PgBouncer) |
 | LLM batching | Anthropic Batch API / OpenAI Batch |
-| Cache invalidation | TTL per modul (4h) — descrierile expiră automat |
+| Cache invalidation | TTL per modul (4h); descrierile expiră automat |
 | Streaming | Server-Sent Events pentru actualizări live ale NPC-urilor |

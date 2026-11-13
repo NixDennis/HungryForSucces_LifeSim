@@ -12,7 +12,7 @@ const CITIES = [
   { id: 'bucuresti', name: 'București', country: 'România', lat: 44.4268, lon: 26.1025, active: false },
 ];
 
-// CSS (keyframes + hover — nu se pot face inline)
+// CSS (keyframes și hover nu se pot face inline)
 const CSS = `
 .hs-root { position: fixed; inset: 0; overflow: hidden; background: #000; font-family: ui-sans-serif, system-ui, sans-serif; }
 .hs-globe { position: absolute; inset: 0; z-index: 1; }
@@ -67,7 +67,7 @@ const CSS = `
 .hs-footer { position: absolute; bottom: 18px; width: 100%; text-align: center; color: #4a4760; font-size: 0.72rem; z-index: 3; letter-spacing: 2px; }
 `;
 
-// onEnterCity() — semnal către pagina principală că intrăm în simulare
+// onEnterCity() anunță pagina principală că intrăm în simulare
 export default function HomeScreen({ onEnterCity }) {
   // phase: 'title' → 'cities' → 'focusing' → 'arrived'
   const [phase, setPhase] = useState('title');

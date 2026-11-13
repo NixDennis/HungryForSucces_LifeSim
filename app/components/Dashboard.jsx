@@ -65,7 +65,7 @@ function wttrIcon(code) {
   return '🌤️';
 }
 
-// ─── Avatare PNG — poze reale din public/avatars/ ────────────────────────────
+// ─── Avatare PNG: poze reale din public/avatars/ ────────────────────────────
 
 function NPCAvatar({ id, size = 40 }) {
   return (
@@ -79,19 +79,19 @@ function NPCAvatar({ id, size = 40 }) {
   );
 }
 
-// Păstrat pentru compatibilitate cu CityMap (HTML string) — folosit ca fallback
+// Păstrat pentru compatibilitate cu CityMap (HTML string); folosit ca fallback
 const NPC_AVATAR_SVG = {
 
-  1: ( // Student Andrei — păr negru scurt, șapcă absolvire violet
+  1: ( // Student Andrei: păr negru scurt, șapcă absolvire violet
     <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
       <circle cx="20" cy="20" r="19" fill="#1e1b4b"/>
       {/* Față */}
       <circle cx="20" cy="25" r="11" fill="#fcd5a8"/>
       {/* Păr negru care umple sus */}
       <path d="M9 24 Q9 12 20 11 Q31 12 31 24 Q29 17 20 17 Q11 17 9 24Z" fill="#1c1917"/>
-      {/* Șapcă — platformă */}
+      {/* Șapcă: platformă */}
       <rect x="10" y="17" width="20" height="2.5" fill="#4c1d95" rx="0.8"/>
-      {/* Șapcă — top trapezoidal */}
+      {/* Șapcă: top trapezoidal */}
       <path d="M13 17 Q13 10 20 10 Q27 10 27 17Z" fill="#5b21b6"/>
       {/* Ciucure */}
       <circle cx="27.5" cy="12.5" r="2" fill="#fbbf24"/>
@@ -114,7 +114,7 @@ const NPC_AVATAR_SVG = {
     </svg>
   ),
 
-  2: ( // Programatoare Elena — coc înalt negru, ochelari subțiri
+  2: ( // Programatoare Elena: coc înalt negru, ochelari subțiri
     <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
       <circle cx="20" cy="20" r="19" fill="#0f172a"/>
       {/* Față */}
@@ -147,12 +147,12 @@ const NPC_AVATAR_SVG = {
     </svg>
   ),
 
-  3: ( // Medic Dr. Mihai — păr grizonat scurt, stetoscop roșu
+  3: ( // Medic Dr. Mihai: păr grizonat scurt, stetoscop roșu
     <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
       <circle cx="20" cy="20" r="19" fill="#450a0a"/>
       {/* Față */}
       <circle cx="20" cy="25" r="11" fill="#fde8d8"/>
-      {/* Halat alb — guler vizibil */}
+      {/* Halat alb: guler vizibil */}
       <path d="M10 38 L13 27 L20 30 L27 27 L30 38" fill="#f8fafc"/>
       {/* Păr gri scurt */}
       <path d="M9 23 Q9 13 20 12 Q31 13 31 23 Q29 17.5 20 17.5 Q11 17.5 9 23Z" fill="#9ca3af"/>
@@ -180,7 +180,7 @@ const NPC_AVATAR_SVG = {
     </svg>
   ),
 
-  4: ( // Profesor Prof. Ioana — păr castaniu în coc mare, ochelari rotunzi
+  4: ( // Profesor Prof. Ioana: păr castaniu în coc mare, ochelari rotunzi
     <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
       <circle cx="20" cy="20" r="19" fill="#451a03"/>
       {/* Față */}
@@ -215,7 +215,7 @@ const NPC_AVATAR_SVG = {
     </svg>
   ),
 
-  5: ( // Bucătar Cristi — păr blond, tocă albă înaltă, obrăjori mari
+  5: ( // Bucătar Cristi: păr blond, tocă albă înaltă, obrăjori mari
     <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
       <circle cx="20" cy="20" r="19" fill="#431407"/>
       {/* Față */}
@@ -247,7 +247,7 @@ const NPC_AVATAR_SVG = {
     </svg>
   ),
 
-  6: ( // Artistă Raluca — păr roșcat lung cu ondulații, beret roz
+  6: ( // Artistă Raluca: păr roșcat lung cu ondulații, beret roz
     <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
       <circle cx="20" cy="20" r="19" fill="#500724"/>
       {/* Față */}
@@ -281,12 +281,12 @@ const NPC_AVATAR_SVG = {
     </svg>
   ),
 
-  7: ( // Avocat Alexandru — păr negru pieptănat cu cărare, cravată roșie
+  7: ( // Avocat Alexandru: păr negru pieptănat cu cărare, cravată roșie
     <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
       <circle cx="20" cy="20" r="19" fill="#0f172a"/>
       {/* Față */}
       <circle cx="20" cy="25" r="11" fill="#dde4f0"/>
-      {/* Costum negru — guler */}
+      {/* Costum negru: guler */}
       <path d="M10 38 L13 27 L20 31 L27 27 L30 38" fill="#1e293b"/>
       {/* Cămașă albă */}
       <path d="M17 27 L20 31 L23 27 L21.5 25.5 L20 27.5 L18.5 25.5Z" fill="#f8fafc"/>
@@ -314,7 +314,7 @@ const NPC_AVATAR_SVG = {
     </svg>
   ),
 
-  8: ( // Antreprenor Bogdan — păr ondulat șaten, expresie energică
+  8: ( // Antreprenor Bogdan: păr ondulat șaten, expresie energică
     <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
       <circle cx="20" cy="20" r="19" fill="#052e16"/>
       {/* Față */}
@@ -342,7 +342,7 @@ const NPC_AVATAR_SVG = {
     </svg>
   ),
 
-  9: ( // Sportiv Radu — păr blond scurt, bandană verde cu linie albă
+  9: ( // Sportiv Radu: păr blond scurt, bandană verde cu linie albă
     <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
       <circle cx="20" cy="20" r="19" fill="#14532d"/>
       {/* Față */}
@@ -370,14 +370,14 @@ const NPC_AVATAR_SVG = {
     </svg>
   ),
 
-  10: ( // Pensionar Gheorghe — păr alb, pălărie maro, mustață albă groasă
+  10: ( // Pensionar Gheorghe: păr alb, pălărie maro, mustață albă groasă
     <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
       <circle cx="20" cy="20" r="19" fill="#292524"/>
       {/* Față */}
       <circle cx="20" cy="25" r="11" fill="#fef9c3"/>
-      {/* Pălărie — boruri largi */}
+      {/* Pălărie: boruri largi */}
       <rect x="6" y="16.5" width="28" height="3.5" fill="#92400e" rx="2"/>
-      {/* Pălărie — corp */}
+      {/* Pălărie: corp */}
       <rect x="12" y="7" width="16" height="10.5" fill="#78350f" rx="2.5"/>
       {/* Dungă pălărie */}
       <rect x="12" y="15" width="16" height="2" fill="#a16207"/>
@@ -808,7 +808,7 @@ export default function Dashboard({ onBack }) {
   const [npcDescriptions, setNpcDescriptions] = useState({});
   const [loadingDesc,     setLoadingDesc]     = useState({});
   const [descErrors,      setDescErrors]      = useState({});
-  // { [npcId]: true } — NPC-uri care se deplasează activ pe hartă
+  // { [npcId]: true } pentru NPC-urile care se deplasează acum pe hartă
   const [travelState, setTravelState] = useState({});
 
   const handleTravelStateChange = useCallback((updates) => {

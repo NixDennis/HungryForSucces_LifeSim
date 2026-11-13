@@ -138,7 +138,7 @@ const S = {
 
 // ─── COMPONENT ───────────────────────────────────────────────────────────────
 
-// onExit (opțional) — revine la Home Screen / glob
+// onExit (opțional): revine la Home Screen / glob
 export default function Simulation({ onExit }) {
   const [dayIndex, setDayIndex]       = useState(getCurrentDayIndex());
   const [moduleIndex, setModuleIndex] = useState(MODULE.indexOf(getCurrentModule()));

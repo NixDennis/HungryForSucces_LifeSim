@@ -29,8 +29,8 @@ function easeOutBounce(t) {
 }
 
 const GLOBE_R = 1.6;
-const FOCUS_DUR = 1.8; // secunde — rotația spre oraș
-const DROP_DUR = 1.1;  // secunde — căderea pinului
+const FOCUS_DUR = 1.8; // secunde: rotația spre oraș
+const DROP_DUR = 1.1;  // secunde: căderea pinului
 
 // target: null (rotație liberă) | { lat, lon } (focus pe oraș)
 // onArrived: callback când pinul a aterizat

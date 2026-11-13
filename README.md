@@ -1,19 +1,15 @@
-# LifeSim — Simulator de viață în Iași
+# LifeSim: simulator de viață în Iași
 
 10 NPC-uri trăiesc o săptămână în Iași. Logica locală calculează activitățile, stările și
-relațiile pentru fiecare modul orar. LLM-ul (OpenRouter) este apelat **doar la click** și
-rezultatele sunt cached în PostgreSQL (Neon).
-
----
+relațiile fiecăruia pentru fiecare modul orar. LLM-ul (prin OpenRouter) e apelat **doar la click**,
+iar rezultatele rămân în cache în PostgreSQL (Neon).
 
 ## Stack
 
-- **Next.js 14** (App Router, JavaScript)
-- **MapLibre GL JS** — hartă interactivă 3D a orașului Iași
-- **PostgreSQL** pe [Neon](https://neon.tech) — caching descrieri LLM
-- **OpenRouter** — LLM (`openai/gpt-4o-mini`)
-
----
+- Next.js 14 (App Router, JavaScript)
+- MapLibre GL JS pentru harta 3D interactivă a Iașului
+- PostgreSQL pe [Neon](https://neon.tech) pentru cache-ul descrierilor generate de LLM
+- OpenRouter ca furnizor de LLM (`openai/gpt-4o-mini`)
 
 ## Instalare
 
@@ -34,7 +30,7 @@ OPENROUTER_API_KEY=sk-or-v1-...     # cheia ta de la openrouter.ai
 DATABASE_URL=postgresql://...        # connection string de la neon.tech
 ```
 
-> Fără `DATABASE_URL`, aplicația funcționează fără cache — fiecare click = apel LLM nou.
+> Fără `DATABASE_URL` aplicația merge și fără cache, dar fiecare click face un apel LLM nou.
 
 ### 3. Pornește aplicația
 
@@ -42,20 +38,16 @@ DATABASE_URL=postgresql://...        # connection string de la neon.tech
 npm run dev
 ```
 
-Deschide [http://localhost:3000](http://localhost:3000)
-
----
+Deschide [http://localhost:3000](http://localhost:3000).
 
 ## Cum funcționează
 
-- Simularea pornește/se oprește cu butonul **▶ Start / ⏸ Pauză**
-- Fiecare **modul orar** durează 20 de secunde în timp simulat (8 module/zi × 7 zile)
-- NPC-urile se **deplasează animat** pe hartă între locații — durata depinde de distanță (2–12s)
-- **Click pe un NPC** (din listă sau de pe hartă) → panou detalii cu statistici și relații
-- Butonul **✨ Generează descriere** → apelează LLM și afișează ~50 de cuvinte despre ce face NPC-ul
-- A doua oară în același context → răspuns instant din cache (PostgreSQL)
-
----
+- Simularea pornește și se oprește din butonul **▶ Start / ⏸ Pauză**.
+- Un modul orar durează 20 de secunde în timp simulat (8 module pe zi, 7 zile).
+- NPC-urile se deplasează animat pe hartă între locații, iar drumul durează între 2 și 12 secunde, în funcție de distanță.
+- Un click pe un NPC, din listă sau de pe hartă, deschide panoul cu statisticile și relațiile lui.
+- Butonul **✨ Generează descriere** apelează LLM-ul și afișează cam 50 de cuvinte despre ce face NPC-ul.
+- Dacă ceri din nou descrierea în același context, răspunsul vine instant din cache (PostgreSQL).
 
 ## Structura proiectului
 
@@ -80,10 +72,8 @@ lifesim/
 └── .gitignore
 ```
 
----
-
 ## Note
 
-- Cheia API din `.env.local` **nu se commitează niciodată** (exclusă din `.gitignore`)
-- NPC-urile de la aceeași locație sunt generate împreună într-un singur apel LLM (batching)
-- Dacă batch-ul eșuează, se face fallback automat la apel individual
+- Cheia API din `.env.local` **nu se commitează niciodată**; fișierul e exclus în `.gitignore`.
+- NPC-urile aflate în aceeași locație primesc descrierile dintr-un singur apel LLM (batching).
+- Dacă apelul comun eșuează, aplicația revine automat la câte un apel pentru fiecare NPC.

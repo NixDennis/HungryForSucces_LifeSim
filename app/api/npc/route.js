@@ -67,7 +67,7 @@ function parseBatchResponse(text, states) {
 
 export async function POST(request) {
   try {
-    // initDb este opțional — dacă DB-ul e down, mergem direct la LLM
+    // initDb este opțional: dacă DB-ul e down, mergem direct la LLM
     try { await initDb(); } catch (dbErr) {
       console.warn('[/api/npc] DB init ignorat:', dbErr.message);
     }
@@ -102,7 +102,7 @@ export async function POST(request) {
 
     // ── Batching: găsim toți NPC-urile la aceeași locație ─────────────────
     // Dacă mai mulți NPC sunt la aceeași locație, generăm pentru toți
-    // și salvăm în cache — viitoarele click-uri vor fi instant
+    // și salvăm în cache, ca următoarele click-uri să fie instant
     // NPC-urile "Acasă" nu se batchează (fiecare are activitate casnică proprie)
     const statesLaAceeaLocatie = allStates.filter(
       s => s.locatie === targetState.locatie && s.locatie !== 'Acasă'

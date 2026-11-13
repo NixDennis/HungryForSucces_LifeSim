@@ -8,23 +8,23 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 // pitch redus la 35° (față de 54°) → perspectivă mai clară, markere mai precise
 const IASI = { lng: 27.5870, lat: 47.1590, zoom: 14.0, pitch: 35, bearing: -14 };
 const LIBERTY_STYLE = 'https://tiles.openfreemap.org/styles/liberty';
-const MARKER_SIZE    = 38; // px — folosit și pentru container și pentru offset
+const MARKER_SIZE    = 38; // px, folosit și pentru container și pentru offset
 
-// ─── NPC_HOME: coordonate ACASĂ — DISTINCTE față de locurile de muncă ────────
+// ─── NPC_HOME: coordonate ACASĂ, DISTINCTE față de locurile de muncă ────────
 // CAUZA BUG: anterior NPC_HOME[3] = coordonatele spitalului → Dr. Mihai nu
 // se mișca niciodată vizibil (locatie='Spitalul Sf. Spiridon' = locatie='Acasă')
 // FIX: fiecare NPC are o adresă rezidențială distinctă geografic față de job.
 const NPC_HOME = {
-  1:  [27.5688, 47.1748],  // Andrei  — cartier Copou, lângă parc (NU UAIC campus)
-  2:  [27.5925, 47.1645],  // Elena   — cartier Tătărași (NU Palas birou!)
-  3:  [27.5780, 47.1685],  // Dr Mihai — cartier Centru-Nord (NU spitalul!)
-  4:  [27.5760, 47.1762],  // Prof Ioana — cartier Copou superior (NU campus)
-  5:  [27.5825, 47.1645],  // Cristi  — cartier Podu Roș (NU restaurant Berărescu)
-  6:  [27.5865, 47.1628],  // Raluca  — cartier Centru-Est (NU Palatul Culturii)
-  7:  [27.5792, 47.1648],  // Alexandru — cartier Centru-Vest (NU tribunalul)
-  8:  [27.6015, 47.1562],  // Bogdan  — cartier Moara de Vânt (NU Palas birou!)
-  9:  [27.5948, 47.1488],  // Radu    — cartier Polivalentă (aproape dar DISTINCTE)
-  10: [27.5700, 47.1762],  // Gheorghe — Copou superior (DIFERIT de Parcul Copou)
+  1:  [27.5688, 47.1748],  // Andrei: cartier Copou, lângă parc (NU UAIC campus)
+  2:  [27.5925, 47.1645],  // Elena: cartier Tătărași (NU Palas birou!)
+  3:  [27.5780, 47.1685],  // Dr Mihai: cartier Centru-Nord (NU spitalul!)
+  4:  [27.5760, 47.1762],  // Prof Ioana: cartier Copou superior (NU campus)
+  5:  [27.5825, 47.1645],  // Cristi: cartier Podu Roș (NU restaurant Berărescu)
+  6:  [27.5865, 47.1628],  // Raluca: cartier Centru-Est (NU Palatul Culturii)
+  7:  [27.5792, 47.1648],  // Alexandru: cartier Centru-Vest (NU tribunalul)
+  8:  [27.6015, 47.1562],  // Bogdan: cartier Moara de Vânt (NU Palas birou!)
+  9:  [27.5948, 47.1488],  // Radu: cartier Polivalentă (aproape dar DISTINCTE)
+  10: [27.5700, 47.1762],  // Gheorghe: Copou superior (DIFERIT de Parcul Copou)
 };
 
 // ─── Mapare completă: locație simulare → coordonate GPS ──────────────────────
@@ -112,7 +112,7 @@ const NPCS = [
   { id: 10, name: 'Gheorghe Lupu',          color: '#94a3b8' },
 ];
 
-// ─── Avatare SVG (HTML string — stil cartoon pixel-art, identice cu Dashboard) ─
+// ─── Avatare SVG (HTML string, stil cartoon pixel-art, identice cu Dashboard) ─
 const NPC_AVATAR_HTML = {
   1: `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="19" fill="#1e1b4b"/><circle cx="20" cy="25" r="11" fill="#fcd5a8"/><path d="M9 24 Q9 12 20 11 Q31 12 31 24 Q29 17 20 17 Q11 17 9 24Z" fill="#1c1917"/><rect x="10" y="17" width="20" height="2.5" fill="#4c1d95" rx="0.8"/><path d="M13 17 Q13 10 20 10 Q27 10 27 17Z" fill="#5b21b6"/><circle cx="27.5" cy="12.5" r="2" fill="#fbbf24"/><line x1="27.5" y1="14.5" x2="27.5" y2="17" stroke="#fbbf24" stroke-width="1.4"/><path d="M14.5 22 Q16.5 20.8 18.5 22" stroke="#3d1f0a" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M21.5 22 Q23.5 20.8 25.5 22" stroke="#3d1f0a" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="16" cy="24.5" r="3" fill="white"/><circle cx="24" cy="24.5" r="3" fill="white"/><circle cx="16" cy="24.5" r="1.8" fill="#312e81"/><circle cx="24" cy="24.5" r="1.8" fill="#312e81"/><circle cx="16.9" cy="23.6" r="0.8" fill="white"/><circle cx="24.9" cy="23.6" r="0.8" fill="white"/><ellipse cx="12.5" cy="27.5" rx="2.8" ry="1.7" fill="#fb7185" opacity="0.4"/><ellipse cx="27.5" cy="27.5" rx="2.8" ry="1.7" fill="#fb7185" opacity="0.4"/><path d="M16 29.5 Q20 33.5 24 29.5" stroke="#c27c5a" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>`,
   2: `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="19" fill="#0f172a"/><circle cx="20" cy="25" r="11" fill="#fddcb5"/><path d="M9 24 Q9 12 20 11 Q31 12 31 24 Q29 17 20 17 Q11 17 9 24Z" fill="#1e293b"/><ellipse cx="25" cy="10" rx="5" ry="4.5" fill="#1e293b"/><ellipse cx="25" cy="10" rx="3.5" ry="3" fill="#334155"/><rect x="12.5" y="22.5" width="6" height="4.5" fill="none" stroke="#475569" stroke-width="1.4" rx="1.5"/><rect x="21.5" y="22.5" width="6" height="4.5" fill="none" stroke="#475569" stroke-width="1.4" rx="1.5"/><line x1="18.5" y1="24.5" x2="21.5" y2="24.5" stroke="#475569" stroke-width="1.4"/><line x1="12.5" y1="24" x2="11" y2="23.2" stroke="#475569" stroke-width="1.2"/><path d="M13.5 21.5 Q15.5 20.3 17.5 21.5" stroke="#4a3728" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M22.5 21.5 Q24.5 20.3 26.5 21.5" stroke="#4a3728" stroke-width="1.4" fill="none" stroke-linecap="round"/><circle cx="15.5" cy="25" r="2.2" fill="white"/><circle cx="24.5" cy="25" r="2.2" fill="white"/><circle cx="15.5" cy="25" r="1.3" fill="#0f172a"/><circle cx="24.5" cy="25" r="1.3" fill="#0f172a"/><circle cx="16.1" cy="24.3" r="0.55" fill="white"/><circle cx="25.1" cy="24.3" r="0.55" fill="white"/><ellipse cx="12" cy="27.5" rx="2.5" ry="1.5" fill="#f9a8d4" opacity="0.4"/><ellipse cx="28" cy="27.5" rx="2.5" ry="1.5" fill="#f9a8d4" opacity="0.4"/><path d="M16.5 29 Q20 32 23.5 29" stroke="#b27650" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>`,
@@ -127,7 +127,7 @@ const NPC_AVATAR_HTML = {
 };
 
 // ─── Animație deplasare NPC ───────────────────────────────────────────────────
-// Distanță Haversine între două coordonate [lng, lat] — rezultat în metri
+// Distanță Haversine între două coordonate [lng, lat], cu rezultatul în metri
 function haversineDist([lng1, lat1], [lng2, lat2]) {
   const R  = 6371000;
   const φ1 = lat1 * Math.PI / 180, φ2 = lat2 * Math.PI / 180;
@@ -235,7 +235,7 @@ function add3DBuildings(map) {
 }
 
 // ─── CSS animații (NUMAI pentru pulse + hover transition) ───────────────────
-// NU afectează dimensiunile / poziționarea — acestea sunt inline pe element.
+// NU afectează dimensiunile / poziționarea; acestea sunt inline pe element.
 let cssInjected = false;
 function injectMarkerCSS() {
   if (cssInjected || typeof document === 'undefined') return;
@@ -263,7 +263,7 @@ function injectMarkerCSS() {
 function createMarkerEl(npc, onClickFn) {
   const SZ = MARKER_SIZE;  // 38px
 
-  // Container — dimensiuni inline, overflow visible pentru pulse
+  // Container: dimensiuni inline, overflow visible pentru pulse
   const container = document.createElement('div');
   container.setAttribute('data-npc-id', npc.id);
   Object.assign(container.style, {
@@ -271,10 +271,10 @@ function createMarkerEl(npc, onClickFn) {
     height:   `${SZ}px`,
     cursor:   'pointer',
     overflow: 'visible',
-    // position va fi setat 'absolute' de MapLibre — ok
+    // position va fi setat 'absolute' de MapLibre, e ok
   });
 
-  // Pulse ring — centrat absolut față de container, non-layout
+  // Pulse ring: centrat absolut față de container, non-layout
   const pulse = document.createElement('div');
   Object.assign(pulse.style, {
     position:        'absolute',
@@ -288,7 +288,7 @@ function createMarkerEl(npc, onClickFn) {
     animation:       `ls-pulse 2.5s ease-out ${((npc.id * 0.37) % 2.4).toFixed(2)}s infinite`,
   });
 
-  // Avatar circle — dimensiuni fixe inline
+  // Avatar circle: dimensiuni fixe inline
   const avatar = document.createElement('div');
   avatar.className = 'ls-avatar-inner';
   Object.assign(avatar.style, {
@@ -309,7 +309,7 @@ function createMarkerEl(npc, onClickFn) {
   img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;';
   avatar.appendChild(img);
 
-  // Tooltip label — apare la hover
+  // Tooltip label: apare la hover
   const label = document.createElement('div');
   Object.assign(label.style, {
     position:    'absolute',
@@ -336,7 +336,7 @@ function createMarkerEl(npc, onClickFn) {
   container.appendChild(avatar);
   container.appendChild(label);
 
-  // Hover handlers via JS (nu CSS — nu depind de class)
+  // Hover handlers via JS (nu CSS, ca să nu depindă de class)
   container.addEventListener('mouseenter', () => {
     label.style.opacity = '1';
     avatar.style.transform = 'scale(1.22)';
@@ -436,7 +436,7 @@ export default function CityMap({
 
   // ── Refs pentru animația de deplasare ────────────────────────────────────
   // travelsRef:    { [npcId]: { from, to, startTime, duration } }
-  // currentPosRef: { [npcId]: [lng, lat] } — poziția afișată în orice moment
+  // currentPosRef: { [npcId]: [lng, lat] }, poziția afișată în orice moment
   // rAFRef:        handle rAF activ (null = oprit)
   const travelsRef       = useRef({});
   const currentPosRef    = useRef({});
@@ -444,7 +444,7 @@ export default function CityMap({
   const onTravelChgRef   = useRef(onTravelStateChange);
   onTravelChgRef.current = onTravelStateChange;
 
-  // Ref stabil pentru npcStates — accesibil din closure doSetup
+  // Ref stabil pentru npcStates, accesibil din closure-ul doSetup
   const npcStatesRef = useRef(npcStates);
   npcStatesRef.current = npcStates;
 
@@ -455,7 +455,7 @@ export default function CityMap({
     else setSelectedNPC(prev => npc && prev?.id !== npc.id ? npc : null);
   };
 
-  // ── Buclă RAF — interpolează pozițiile markerelor frame-by-frame ─────────
+  // ── Buclă RAF: interpolează pozițiile markerelor frame-by-frame ─────────
   function startRAFLoop() {
     if (rAFRef.current) return; // deja rulează
 
@@ -533,7 +533,7 @@ export default function CityMap({
     }
   }, [effectiveId, embedded]);
 
-  // ── Actualizează pozițiile markerelor — cu animație fluidă ──────────────
+  // ── Actualizează pozițiile markerelor, cu animație ──────────────
   // Detectează schimbări de locație și pornește interpolări RAF
   // în loc de teleportare instantanee.
   useEffect(() => {
@@ -547,7 +547,7 @@ export default function CityMap({
 
       const current = currentPosRef.current[npcId];
       if (!current) {
-        // Prima inițializare — plasare directă, fără animație
+        // Prima inițializare: plasare directă, fără animație
         currentPosRef.current[npcId] = target;
         const entry = markersRef.current.find(m => m.npcId === npcId);
         if (entry) entry.marker.setLngLat(target);
